@@ -53,6 +53,28 @@ io.on("connection", function(uniquesocket) {
     });
 
 
+    uniquesocket.on("move", (move) => {
+        try {
+            if (chess.turn() === "w" && uniquesocket.id!== players.white) return;
+            if (chess.turn() === "b" && uniquesocket.id!== players.black) return;
+
+            const result = chess.move(move);                                             // checks if its a valid move or not
+
+            if(result) {
+                currentPlayer = chess.turn();
+                io.emit("move", move);
+                io.emit("boardState", chess.fen());                                      // chess.fen() will send the current state of the board
+            } else {
+                console.log("Invalid move : ", move);
+                uniquesocket.emit("Invalid move", move);
+            }
+        } catch (error) {
+            console.log(error);
+             uniquesocket.emit("Invalid move", move);
+        }
+    });
+
+
 
 
 
