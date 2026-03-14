@@ -1,4 +1,4 @@
-const { Chess } = require("chess.js");
+// const { Chess } = require("chess.js");
 
 const socket = io();
 const chess = new Chess();
@@ -27,7 +27,7 @@ const renderBoard = () => {
                 const pieceElement = document.createElement("div");
                 pieceElement.classList.add("piece", square.color === "w" ? "white" : "black");
 
-            pieceElement.innerHTML = "";
+            pieceElement.innerHTML = getUnicodePiece(square);
             pieceElement.draggable = playerRole === square.color;
 
             pieceElement.addEventListener("dragstart", (e) => {
@@ -64,12 +64,8 @@ const renderBoard = () => {
                 }
             });
 
-
-
-
-     
+         boardElement.appendChild(squareElement);
         });
-        boardElement.appendChild(squareElement);
     });
 };
 
@@ -77,8 +73,23 @@ const handleMove = () => {
 
 };
 
-const getPiece = () => {
+const getUnicodePiece = (piece) => {
+    const unicodePieces = {
+        K: "♔",  // King
+        Q: "♕",  // Queen
+        R: "♖",  // Rook
+        B: "♗",  // Bishop
+        N: "♘",  // Knight
+        P: "♙",  // Pawn
+        k: "♚",  // King
+        q: "♛",  // Queen
+        r: "♜",  // Rook
+        b: "♝",  // Bishop
+        n: "♞",  // Knight
+        p: "♟"   // Pawn
+    }
 
+    return unicodePieces[piece.type] || "";
 };
 
 renderBoard();
